@@ -1,7 +1,7 @@
 # 🛒 E_comm_amazon
 
 <p align="center">
-  <strong>A Scalable, Domain-Driven E-Commerce REST API Backend Powered by Java 17 & Spring Boot</strong>
+  <strong>Java 17 ve Spring Boot ile Geliştirilmiş, Domain-Driven Tasarıma Sahip Ölçeklenebilir E-Ticaret REST API Backend Servisi</strong>
 </p>
 
 <p align="center">
@@ -21,92 +21,92 @@
     <img src="https://img.shields.io/badge/Apache_Maven-3.9+-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven">
   </a>
   <a href="https://github.com/BurhanAlperen/E_comm_amazon">
-    <img src="https://img.shields.io/badge/Lombok-Supported-BC4522?style=for-the-badge&logo=lombok&logoColor=white" alt="Lombok">
+    <img src="https://img.shields.io/badge/Lombok-Destekli-BC4522?style=for-the-badge&logo=lombok&logoColor=white" alt="Lombok">
   </a>
 </p>
 
 <p align="center">
-  🌐 <strong>Languages:</strong> <strong>English</strong> | <a href="README_TR.md">Türkçe</a>
+  🌐 <strong>Dil Seçenekleri:</strong> <strong>Türkçe</strong> | <a href="README_EN.md">English</a>
 </p>
 
 <p align="center">
-  <a href="#-project-overview">Overview</a> •
-  <a href="#-visual-architecture">Architecture</a> •
-  <a href="#-features">Features</a> •
-  <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-project-structure">Structure</a> •
-  <a href="#-api-documentation">API Docs</a> •
-  <a href="#-getting-started">Getting Started</a> •
-  <a href="#-roadmap">Roadmap</a>
+  <a href="#-projeye-genel-bakış">Genel Bakış</a> •
+  <a href="#-görsel-mimari">Mimari</a> •
+  <a href="#-özellikler">Özellikler</a> •
+  <a href="#-teknoloji-yığını">Teknolojiler</a> •
+  <a href="#-proje-yapısı">Proje Yapısı</a> •
+  <a href="#-api-dokümantasyonu">API Dokümantasyonu</a> •
+  <a href="#-kurulum-ve-çalıştırma">Kurulum</a> •
+  <a href="#-yol-haritası-roadmap">Yol Haritası</a>
 </p>
 
 ---
 
-## 📖 Project Overview
+## 📖 Projeye Genel Bakış
 
-**E_comm_amazon** is an enterprise-grade, modular e-commerce backend service architected using **Domain-Driven Design (DDD) & Package-by-Feature** conventions.
+**E_comm_amazon**, kurumsal standartlarda **Domain-Driven Design (DDD) ve Package-by-Feature** yaklaşımları benimsenerek geliştirilmiş, modüler bir e-ticaret backend servisidir.
 
-In typical monolithic systems, codebases often devolve into tightly coupled, hard-to-maintain files. **E_comm_amazon** addresses this problem by segregating concerns strictly across domain boundaries (`customer`, `product`, `user`) and isolating each domain into three distinct layers:
-1. **`web/`** — Handles HTTP transport, validation, and JSON DTO marshaling.
-2. **`api/`** — Exposes public interfaces and domain contract DTOs across modules.
-3. **`impl/`** — Encapsulates concrete business logic, JPA entities, and repository access.
+Geleneksel monolitik yapılarda kodlar zamanla birbirine sıkı sıkıya bağlanır ve yönetilmesi zorlaşır. **E_comm_amazon**, bu problemi sorumlulukları domain sınırlarına göre (`customer`, `product`, `user`) ayırarak ve her bir domaini üç temel katmanda izole ederek çözer:
+1. **`web/`** — HTTP isteklerini, parametre doğrulamalarını ve JSON DTO dönüşümlerini yönetir.
+2. **`api/`** — Modüller arası sözleşmeleri temsil eden public servis arayüzlerini ve domain DTO'larını sunar.
+3. **`impl/`** — İş kurallarını (Business Logic), JPA varlıklarını (Entity) ve veritabanı erişimini (Repository) kapsüller.
 
-### Key Capabilities
-- **Decoupled Architecture:** Each domain module hides its persistence entities from outer consumers, preventing internal schema leaks.
-- **Dynamic Shopping Cart Engine:** Real-time active cart resolution (`status = 0`), cart item consolidation, and automatic cart total recalculations.
-- **Product Catalog & Hierarchy:** Store-to-Category (`@ManyToOne`) and Category-to-Product (`@OneToMany`) relational data models.
-- **User Authentication Lifecycle:** Registration, credential validation (`userLogin`), and safe user representation without exposing sensitive hashes/passwords.
+### Temel Yetkinlikler
+- **Katmanlar Arası İzolasyon:** Her domain modülü kendi persistence entity'lerini dış dünyadan saklar, veritabanı şemasının doğrudan dışarı sızmasını engeller.
+- **Dinamik Sepet Motoru:** Aktif sepet tespiti (`status = 0`), sepetteki mükerrer ürünlerin konsolidasyonu ve toplam tutarın anlık hesaplanması.
+- **Katalog ve Hiyerarşik Yapı:** Mağaza - Kategori (`@ManyToOne`) ve Kategori - Ürün (`@OneToMany`) ilişkileriyle kurgulanan çok satıcılı e-ticaret modeli.
+- **Kullanıcı Kimlik Doğrulama Döngüsü:** Güvenli kayıt, kimlik kontrolü (`userLogin`) ve şifre gibi hassas bilgilerin yanıtlarda gizlenmesi.
 
 ---
 
-## 🏛️ Visual Architecture
+## 🏛️ Görsel Mimari
 
-### Domain Layer Isolation Flow
+### Katmanlar Arası Veri Akışı
 
 ```mermaid
 flowchart TD
-    Client["Client / Postman / Frontend"]
+    Client["İstemci / Postman / Frontend"]
 
-    subgraph PresentationLayer["Web Layer (web)"]
-        Controller["RestController (e.g. BasketController)"]
+    subgraph PresentationLayer["Web Katmanı (web)"]
+        Controller["RestController (Örn: BasketController)"]
         ReqDTO["Request DTO (BasketRequest)"]
         ResDTO["Response DTO (BasketResponse)"]
     end
 
-    subgraph ContractLayer["API Contract Layer (api)"]
+    subgraph ContractLayer["API Sözleşme Katmanı (api)"]
         ServiceIntf["Service Interface (BasketService)"]
         DomainDTO["Domain DTO (BasketDto)"]
     end
 
-    subgraph PersistenceLayer["Implementation Layer (impl)"]
+    subgraph PersistenceLayer["Implementasyon Katmanı (impl)"]
         ServiceImpl["Service Implementation (BasketServiceImpl)"]
         Repo["JpaRepository (BasketRepository)"]
         Entity["JPA Entity (Basket & BasketProduct)"]
     end
 
-    DB[("MySQL Database (amazon_db)")]
+    DB[("MySQL Veritabanı (amazon_db)")]
 
     Client -->|HTTP POST/GET/PUT/DELETE| Controller
-    Controller -->|Maps to DTO| ReqDTO
-    Controller -->|Calls contract| ServiceIntf
-    ServiceIntf -.->|Implemented by| ServiceImpl
-    ServiceImpl -->|Queries / Persists| Repo
-    Repo -->|Manages| Entity
-    Repo -->|JDBC SQL| DB
-    ServiceImpl -->|Maps to| DomainDTO
-    Controller -->|Maps to| ResDTO
-    ResDTO -->|JSON Response| Client
+    Controller -->|DTO Dönüşümü| ReqDTO
+    Controller -->|Sözleşme Çağrısı| ServiceIntf
+    ServiceIntf -.->|Gerçekleştiren| ServiceImpl
+    ServiceImpl -->|Sorgu / Kayıt| Repo
+    Repo -->|Yönetir| Entity
+    Repo -->|SQL Sorguları| DB
+    ServiceImpl -->|Dönüştürür| DomainDTO
+    Controller -->|Dönüştürür| ResDTO
+    ResDTO -->|JSON Yanıtı| Client
 ```
 
-### Multi-Domain Relation Map
+### Çoklu Domain İlişki Şeması (ER Diyagramı)
 
 ```mermaid
 erDiagram
-    USER ||--o{ BASKET : owns
-    BASKET ||--|{ BASKET_PRODUCT : contains
-    PRODUCT ||--o{ BASKET_PRODUCT : "referenced by"
-    STORE ||--|{ CATEGORY : manages
-    CATEGORY ||--|{ PRODUCT : categorizes
+    USER ||--o{ BASKET : "sahiptir"
+    BASKET ||--|{ BASKET_PRODUCT : "içerir"
+    PRODUCT ||--o{ BASKET_PRODUCT : "referans verir"
+    STORE ||--|{ CATEGORY : "yönetir"
+    CATEGORY ||--|{ PRODUCT : "kategorize eder"
 
     USER {
         int user_id PK
@@ -145,116 +145,116 @@ erDiagram
 
 ---
 
-## ✨ Features
+## ✨ Özellikler
 
-### 👤 1. User Management & Credential Verification
-- **User Registration:** Encapsulated onboarding storing `username` and `password` via `POST /users`.
-- **Credential Validation (`userLogin`):** Verifies username presence and password equality; returns `"OK"` upon valid match or throws explicit `IllegalArgumentException` on mismatch.
-- **Security Isolation:** `UserResponse` strips away the password field, preventing credential exposure to client consumers.
-- **CRUD Suite:** Supports user retrieval by ID (`GET /users/{id}`), listing all users (`GET /users`), updating credentials (`PUT /users/{id}`), and account deletion (`DELETE /users/{id}`).
+### 👤 1. Kullanıcı Yönetimi ve Giriş Doğrulama
+- **Kullanıcı Kaydı:** `username` ve `password` bilgileriyle `POST /users` üzerinden yeni hesap oluşturma.
+- **Kimlik Doğrulama (`userLogin`):** Kullanıcı adı varlığı ve şifre eşleşmesini kontrol eder; doğruysa `"OK"` döner, hatalıysa `IllegalArgumentException` fırlatır.
+- **DTO İzolasyonu:** `UserResponse` sınıfında şifre alanı yer almaz, böylece istemciye hassas veri sızdırılmaz.
+- **CRUD Operasyonları:** ID ile kullanıcı sorgulama (`GET /users/{id}`), tüm kullanıcıları listeleme (`GET /users`), bilgi güncelleme (`PUT /users/{id}`) ve hesap silme (`DELETE /users/{id}`).
 
-### 🛒 2. Intelligent Cart & Basket Engine
-- **State-Aware Cart Identification:** Retrieves or provisions active carts tagged with `BASKET_STATUS_NONE = 0`.
-- **Dynamic 3-Case Add-to-Cart Flow:**
-  - *Case 1 (No Active Cart):* Instantiates a new `Basket`, attaches the user, creates initial `BasketProduct`, calculates product amount, and sets the initial basket amount.
-  - *Case 2 (Cart Exists, New Product):* Identifies product absence via `BasketProductService.exist(basketId, productId)`, appends a new `BasketProduct`, and recalculates total cart price.
-  - *Case 3 (Cart Exists, Existing Product):* Consolidates product counts (`existingCount + newCount`), updates line-item amount, and synchronizes the total basket amount.
-- **Multi-State Order Lifecycle Ready:** Entity architecture contains lifecycle status definitions:
-  - `0`: NONE (Active Cart)
-  - `1`: READY_TO_PAY (Checkout initiated)
-  - `2`: PAYED (Payment verified)
-  - `3`: PROCESSING (Fulfillment)
-  - `4`: DELIVERED (Carrier delivery)
-  - `5`: DONE (Completed order)
+### 🛒 2. Akıllı Sepet Motoru
+- **Duruma Dayalı Sepet Tespiti:** Kullanıcının aktif sepeti `BASKET_STATUS_NONE = 0` statüsüyle sorgulanır veya gerekirse otomatik açılır.
+- **Dinamik 3 Senaryolu Sepete Ekleme Akışı:**
+  - *1. Senaryo (Aktif Sepet Yok):* Yeni bir `Basket` oluşturulur, kullanıcı bağlanır, ilk `BasketProduct` eklenir ve sepet toplam tutarı hesaplanarak kaydedilir.
+  - *2. Senaryo (Sepet Var, Eklenen Ürün Sepette Yok):* `BasketProductService.exist(basketId, productId)` ile ürün yokluğu tespit edilir, sepete yeni ürün satırı eklenir ve toplam tutar güncellenir.
+  - *3. Senaryo (Sepet Var, Eklenen Ürün Sepette Zaten Var):* Ürün adedi artırılır (`mevcutAdet + yeniAdet`), ürün tutarı ve sepet genel toplamı yeniden hesaplanır.
+- **Sipariş Yaşam Döngüsü Altyapısı:**
+  - `0`: NONE (Aktif Sepet)
+  - `1`: READY_TO_PAY (Ödeme adımına geçildi)
+  - `2`: PAYED (Ödeme alındı)
+  - `3`: PROCESSING (Sipariş hazırlanıyor)
+  - `4`: DELIVERED (Kargoda / Teslim edildi)
+  - `5`: DONE (Süreç tamamlandı)
 
-### 📦 3. Product Catalog
-- **Independent Inventory Record:** Full CRUD endpoints under `/products` managing item names and decimal prices (`amount`).
-- **Entity Identity Optimization:** Employs MySQL `GenerationType.IDENTITY` for optimized database-native primary key auto-incrementation.
+### 📦 3. Ürün Kataloğu
+- **Bağımsız Envanter Yönetimi:** `/products` altında ürün adı ve birim fiyat (`amount`) yönetimi için tam CRUD desteği.
+- **MySQL Identity Optimizasyonu:** Otomatik artan ID'ler için `GenerationType.IDENTITY` kullanımı.
 
-### 🏬 4. Store & Category Hierarchy
-- **Vendor/Store Management:** Dedicated `/store` endpoints supporting rating metrics (`rate`) and vendor profiles (`storeName`).
-- **Category Taxonomy:** Category management under `/categories` linked to parent stores via `@ManyToOne` and product listings via `@OneToMany`.
+### 🏬 4. Mağaza ve Kategori Hiyerarşisi
+- **Satıcı/Mağaza Yönetimi:** `/store` altında mağaza puanı (`rate`) ve satıcı profilleri yönetimi.
+- **Kategori Taksonomisi:** `/categories` altında mağazalara bağlı (`@ManyToOne`) ve ürünleri gruplayan (`@OneToMany`) kategori yapısı.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Teknoloji Yığını
 
-| Technology | Version / Scope | Role in Architecture |
+| Teknoloji | Sürüm / Kapsam | Mimarideki Rolü |
 | :--- | :--- | :--- |
-| **Java** | `17 (LTS)` | Core Programming Language |
-| **Spring Boot** | `4.1.0` | Application Framework, Inversion of Control & Web Server |
-| **Spring WebMVC** | `Spring Boot Starter` | RESTful API Controllers, HTTP Request/Response Dispatcher |
-| **Spring Data JPA** | `Spring Boot Starter` | Repository abstraction, declarative querying |
-| **Hibernate** | `6.x (via JPA Starter)` | Object-Relational Mapping (ORM), schema synchronizer |
-| **MySQL** | `8.0+ / Connector-J` | Persistent Relational Database Management System |
-| **Lombok** | `1.18+` | Boilerplate reduction (`@Getter`, `@Setter`, `@RequiredArgsConstructor`) |
-| **Apache Maven** | `3.9+ / Wrapper (mvnw)` | Dependency Management, Lifecycle Build Automation |
+| **Java** | `17 (LTS)` | Temel Programlama Dili |
+| **Spring Boot** | `4.1.0` | Uygulama Çatısı, Bağımlılık Enjeksiyonu ve Web Sunucusu |
+| **Spring WebMVC** | `Spring Boot Starter` | REST API Controller sınıfları, HTTP İstek/Yanıt Yönetimi |
+| **Spring Data JPA** | `Spring Boot Starter` | Repository soyutlaması, bildirimsel veritabanı sorguları |
+| **Hibernate** | `6.x (JPA Starter)` | Nesne-İlişkisel Eşleme (ORM), şema senkronizasyonu |
+| **MySQL** | `8.0+ / Connector-J` | İlişkisel Veritabanı Yönetim Sistemi (RDBMS) |
+| **Lombok** | `1.18+` | Getter/Setter/Constructor kod kalabalığını azaltma |
+| **Apache Maven** | `3.9+ / Maven Wrapper` | Bağımlılık Yönetimi ve Derleme Otomasyonu |
 
 ---
 
-## 📂 Project Structure
+## 📂 Proje Yapısı
 
 ```text
 src/main/java/com/fotsfer/amazon/
-├── AmazonApplication.java                 # Spring Boot Main Entry Point
+├── AmazonApplication.java                 # Spring Boot Ana Başlangıç Sınıfı
 │
-└── domain/                                # Domain-Driven Modules
-    ├── customer/                          # Customer & Cart Domain
-    │   ├── api/                           # Public Contracts & DTOs
+└── domain/                                # Domain-Driven Modüller
+    ├── customer/                          # Müşteri ve Sepet Alanı
+    │   ├── api/                           # Genel Sözleşmeler ve DTO'lar
     │   │   ├── basket/                    # BasketDto, BasketService
     │   │   └── basketProduct/             # BasketProductDto, BasketProductService
-    │   ├── impl/                          # Business Logic & Entities
-    │   │   └── basket/                    # Basket, BasketProduct, Repositories, ServiceImpls
-    │   └── web/                           # REST Controllers & Web DTOs
+    │   ├── impl/                          # İş Mantığı ve Varlıklar
+    │   │   └── basket/                    # Basket, BasketProduct, Repository ve Servisler
+    │   └── web/                           # REST Controller'lar ve Web Modelleri
     │       ├── basket/                    # BasketController, BasketRequest, BasketResponse
     │       └── basketproduct/             # BasketProductController, Request/Response
     │
-    ├── product/                           # Catalog & Merchant Domain
+    ├── product/                           # Katalog ve Mağaza Alanı
     │   ├── api/
     │   │   ├── category/                  # CategoryDto, CategoryService
     │   │   ├── product/                   # ProductDto, ProductService
     │   │   └── store/                     # StoreDto, StoreService
     │   ├── impl/
-    │   │   ├── category/                  # Category Entity, CategoryRepository, ServiceImpl
-    │   │   ├── product/                   # Product Entity, ProductRepository, ServiceImpl
-    │   │   └── store/                     # Store Entity, StoreRepository, ServiceImpl
+    │   │   ├── category/                  # Category Entity, Repository, Servis
+    │   │   ├── product/                   # Product Entity, Repository, Servis
+    │   │   └── store/                     # Store Entity, Repository, Servis
     │   └── web/
     │       ├── category/                  # CategoryController, Request/Response
     │       ├── product/                   # ProductController, Request/Response
     │       └── store/                     # StoreController, Request/Response
     │
-    └── user/                              # User Identity Domain
-        ├── api/                           # UserDto, UserService Contract
+    └── user/                              # Kullanıcı Kimlik Alanı
+        ├── api/                           # UserDto, UserService Sözleşmesi
         ├── impl/                          # User Entity, UserRepository, UserServiceImpl
         └── web/                           # UserController, UserRequest, UserResponse
 ```
 
 ---
 
-## 📡 API Documentation
+## 📡 API Dokümantasyonu
 
-Base URL: `http://localhost:9092`
+Temel URL: `http://localhost:9092`
 
-### 1. User Endpoints (`/users`)
+### 1. Kullanıcı Uç Noktaları (`/users`)
 
-| Method | Endpoint | Description | Request Body | Response Body |
+| Metot | URL | Açıklama | İstek Gövdesi (Request) | Yanıt Gövdesi (Response) |
 | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/users` | Create new user account | `UserRequest` | `UserResponse` (200 OK) |
-| `POST` | `/users/login` | Verify credentials | `UserRequest` | `"OK"` (200 OK) or 500 Error |
-| `GET` | `/users` | List all users | *None* | `List<UserResponse>` |
-| `GET` | `/users/{id}` | Get user by ID | *None* | `User` Entity |
-| `PUT` | `/users/{id}` | Update username/password | `UserRequest` | `UserResponse` |
-| `DELETE`| `/users/{id}` | Delete user account | *None* | *200 OK (void)* |
+| `POST` | `/users` | Yeni kullanıcı kaydı | `UserRequest` | `UserResponse` (200 OK) |
+| `POST` | `/users/login` | Giriş / Şifre kontrolü | `UserRequest` | `"OK"` (200 OK) veya 500 Hata |
+| `GET` | `/users` | Tüm kullanıcıları listele | *Yok* | `List<UserResponse>` |
+| `GET` | `/users/{id}` | ID ile kullanıcı getir | *Yok* | `User` Entity |
+| `PUT` | `/users/{id}` | Kullanıcı güncelle | `UserRequest` | `UserResponse` |
+| `DELETE`| `/users/{id}` | Kullanıcı sil | *Yok* | *200 OK (boş)* |
 
-#### Sample User Request / Response
+#### Örnek Kullanıcı İsteği / Yanıtı
 ```json
 // POST /users
 {
   "username": "alperen",
-  "password": "securePassword123"
+  "password": "guvenliSifre123"
 }
 
-// Response (200 OK)
+// Yanıt (200 OK)
 {
   "userId": 1,
   "username": "alperen"
@@ -263,13 +263,13 @@ Base URL: `http://localhost:9092`
 
 ---
 
-### 2. Basket Endpoints (`/baskets`)
+### 2. Sepet Uç Noktaları (`/baskets`)
 
-| Method | Endpoint | Description | Request Body | Response Body |
+| Metot | URL | Açıklama | İstek Gövdesi (Request) | Yanıt Gövdesi (Response) |
 | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/baskets` | Add product to active basket (Creates if none) | `BasketRequest` | `BasketResponse` |
+| `POST` | `/baskets` | Sepete ürün ekle (Yoksa sepet açar) | `BasketRequest` | `BasketResponse` |
 
-#### Sample Basket Request / Response
+#### Örnek Sepet İsteği / Yanıtı
 ```json
 // POST /baskets
 {
@@ -278,7 +278,7 @@ Base URL: `http://localhost:9092`
   "count": 2
 }
 
-// Response (200 OK)
+// Yanıt (200 OK)
 {
   "basketId": 1,
   "userId": 1,
@@ -298,68 +298,68 @@ Base URL: `http://localhost:9092`
 
 ---
 
-### 3. Product Endpoints (`/products`)
+### 3. Ürün Uç Noktaları (`/products`)
 
-| Method | Endpoint | Description | Request Body | Response Body |
+| Metot | URL | Açıklama | İstek Gövdesi (Request) | Yanıt Gövdesi (Response) |
 | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/products` | Create product record | `ProductRequest` | `ProductResponse` |
-| `GET` | `/products/{id}` | Get product details | *None* | `Product` |
-| `PUT` | `/products/{id}` | Update product details | `ProductDto` | `ProductResponse` |
-| `DELETE`| `/products/{id}` | Delete product | *None* | *200 OK (void)* |
+| `POST` | `/products` | Yeni ürün kaydet | `ProductRequest` | `ProductResponse` |
+| `GET` | `/products/{id}` | Ürün detayını getir | *Yok* | `Product` |
+| `PUT` | `/products/{id}` | Ürün bilgilerini güncelle | `ProductDto` | `ProductResponse` |
+| `DELETE`| `/products/{id}` | Ürünü sil | *Yok* | *200 OK (boş)* |
 
-#### Sample Product Request / Response
+#### Örnek Ürün İsteği / Yanıtı
 ```json
 // POST /products
 {
-  "productName": "Wireless Noise Cancelling Headphones",
+  "productName": "Kablosuz Kulaklık",
   "productAmount": 350.0
 }
 
-// Response (200 OK)
+// Yanıt (200 OK)
 {
   "productId": 1,
-  "productName": "Wireless Noise Cancelling Headphones",
+  "productName": "Kablosuz Kulaklık",
   "productAmount": 350.0
 }
 ```
 
 ---
 
-### 4. Store & Category Endpoints (`/store`, `/categories`)
+### 4. Mağaza ve Kategori Uç Noktaları (`/store`, `/categories`)
 
-| Method | Endpoint | Description | Request Body | Response Body |
+| Metot | URL | Açıklama | İstek Gövdesi (Request) | Yanıt Gövdesi (Response) |
 | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/store` | Register new store/vendor | `StoreRequest` | `StoreResponse` |
-| `GET` | `/store/{id}` | Get store by ID | *None* | `StoreResponse` |
-| `PUT` | `/store/{id}` | Update store name / rating | `StoreRequest` | `StoreResponse` |
-| `DELETE`| `/store/{id}` | Remove store record | *None* | *200 OK (void)* |
-| `POST` | `/categories` | Register category | `CategoryRequest` | `CategoryResponse` |
-| `GET` | `/categories/{id}` | Retrieve category | *None* | `CategoryResponse` |
-| `PUT` | `/categories/{id}` | Update category | `CategoryRequest` | `CategoryResponse` |
-| `DELETE`| `/categories/{id}` | Delete category | *None* | *200 OK (void)* |
+| `POST` | `/store` | Yeni mağaza/satıcı oluştur | `StoreRequest` | `StoreResponse` |
+| `GET` | `/store/{id}` | Mağaza detayını getir | *Yok* | `StoreResponse` |
+| `PUT` | `/store/{id}` | Mağaza bilgilerini güncelle | `StoreRequest` | `StoreResponse` |
+| `DELETE`| `/store/{id}` | Mağazayı sil | *Yok* | *200 OK (boş)* |
+| `POST` | `/categories` | Yeni kategori oluştur | `CategoryRequest` | `CategoryResponse` |
+| `GET` | `/categories/{id}` | Kategori detayını getir | *Yok* | `CategoryResponse` |
+| `PUT` | `/categories/{id}` | Kategori güncelle | `CategoryRequest` | `CategoryResponse` |
+| `DELETE`| `/categories/{id}` | Kategoriyi sil | *Yok* | *200 OK (boş)* |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Kurulum ve Çalıştırma
 
-### Prerequisites
-- **Java Development Kit (JDK):** Version 17 or higher
-- **MySQL Database Server:** Version 8.0 or higher
-- **Build Tool:** Maven (or use bundled Maven Wrapper `./mvnw`)
+### Gereksinimler
+- **Java Development Kit (JDK):** Sürüm 17 veya üzeri
+- **MySQL Veritabanı:** Sürüm 8.0 veya üzeri
+- **Derleme Aracı:** Maven (veya proje içindeki Maven Wrapper `./mvnw`)
 
-### 1. Clone the Repository
+### 1. Depoyu Klonlayın
 ```bash
 git clone https://github.com/BurhanAlperen/E_comm_amazon.git
 cd E_comm_amazon
 ```
 
-### 2. Configure Database
-Ensure MySQL is running on `localhost:3306`. Create the database schema (optional, as `createDatabaseIfNotExist=true` is enabled in configuration):
+### 2. Veritabanını Yapılandırın
+MySQL sunucunuzun çalıştığından emin olun. Şemayı oluşturun (veya `createDatabaseIfNotExist=true` sayesinde otomatik oluşacaktır):
 ```sql
 CREATE DATABASE IF NOT EXISTS amazon_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-Update your database credentials in `src/main/resources/application.yml` or supply them via environment variables:
+`src/main/resources/application.yml` dosyasındaki veritabanı şifrenizi güncelleyin:
 ```yaml
 server:
   port: 9092
@@ -368,7 +368,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/amazon_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:your_password_here}
+    password: ${DB_PASSWORD:sifreniz_buraya}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -378,24 +378,24 @@ spring:
     open-in-view: false
 ```
 
-### 3. Build & Run Application
+### 3. Projeyi Derleyin ve Başlatın
 
-#### Using Maven Wrapper (macOS / Linux):
+#### macOS / Linux Üzerinde:
 ```bash
 ./mvnw clean spring-boot:run
 ```
 
-#### Using Maven Wrapper (Windows PowerShell):
+#### Windows PowerShell Üzerinde:
 ```powershell
 .\mvnw.cmd clean spring-boot:run
 ```
 
-#### Standard Maven:
+#### Yerel Maven ile:
 ```bash
 mvn clean spring-boot:run
 ```
 
-The application will initialize Tomcat and bind to port **`9092`**:
+Uygulama başarıyla başladığında Tomcat **`9092`** portunu dinlemeye başlayacaktır:
 ```text
 Tomcat started on port 9092 (http) with context path '/'
 Started AmazonApplication in 2.345 seconds
@@ -403,39 +403,39 @@ Started AmazonApplication in 2.345 seconds
 
 ---
 
-## 💻 Example Requests
+## 💻 Örnek İstekler (cURL)
 
-### 1. Register User
+### 1. Kullanıcı Kaydı
 ```bash
 curl -X POST http://localhost:9092/users \
   -H "Content-Type: application/json" \
   -d '{
     "username": "burhan",
-    "password": "Password123"
+    "password": "Sifre123"
   }'
 ```
 
-### 2. Verify Credentials (Login)
+### 2. Giriş Yapma (Kimlik Doğrulama)
 ```bash
 curl -X POST http://localhost:9092/users/login \
   -H "Content-Type: application/json" \
   -d '{
     "username": "burhan",
-    "password": "Password123"
+    "password": "Sifre123"
   }'
 ```
 
-### 3. Create a Product
+### 3. Ürün Oluşturma
 ```bash
 curl -X POST http://localhost:9092/products \
   -H "Content-Type: application/json" \
   -d '{
-    "productName": "Mechanical Keyboard",
+    "productName": "Mekanik Klavye",
     "productAmount": 120.0
   }'
 ```
 
-### 4. Add Product to Basket
+### 4. Sepete Ürün Ekleme
 ```bash
 curl -X POST http://localhost:9092/baskets \
   -H "Content-Type: application/json" \
@@ -448,51 +448,51 @@ curl -X POST http://localhost:9092/baskets \
 
 ---
 
-## 🗺️ Roadmap
+## 🗺️ Yol Haritası (Roadmap)
 
-- [x] Domain-driven layered structure (`api`, `impl`, `web`)
-- [x] Entity relationship mapping (`User`, `Basket`, `BasketProduct`, `Product`, `Category`, `Store`)
-- [x] Dynamic basket total calculation and line-item consolidation
-- [x] Credential verification logic (`userLogin`)
-- [ ] **Security:** Spring Security integration with JWT (JSON Web Tokens)
-- [ ] **Password Security:** BCrypt password hashing for data-at-rest protection
-- [ ] **API Documentation:** Interactive Swagger / OpenAPI 3.0 UI (`springdoc-openapi`)
-- [ ] **Error Handling:** Global Exception Handler via `@RestControllerAdvice` & standard RFC-7807 problem details
-- [ ] **Containerization:** `Dockerfile` and multi-container `docker-compose.yml` (App + MySQL)
-- [ ] **Pagination & Sorting:** Spring Data `Pageable` on all collection endpoints
-- [ ] **Automated Testing:** Unit & Integration test coverage with JUnit 5 & Mockito
+- [x] Domain-Driven katmanlı yapı (`api`, `impl`, `web`)
+- [x] İlişkisel varlık modellemeleri (`User`, `Basket`, `BasketProduct`, `Product`, `Category`, `Store`)
+- [x] Dinamik sepet tutar hesabı ve ürün adedi konsolidasyonu
+- [x] Kimlik ve şifre kontrol mantığı (`userLogin`)
+- [ ] **Güvenlik:** JWT (JSON Web Tokens) ile Spring Security entegrasyonu
+- [ ] **Şifre Güvenliği:** Veritabanındaki şifreler için `BCryptPasswordEncoder` kullanımı
+- [ ] **API Dokümantasyonu:** Swagger / OpenAPI 3.0 arayüzü (`springdoc-openapi`)
+- [ ] **Hata Yönetimi:** `@RestControllerAdvice` ile global exception handler ve RFC-7807 hata standartları
+- [ ] **Konteynerleştirme:** Dockerfile ve `docker-compose.yml` (Uygulama + MySQL)
+- [ ] **Sayfalama ve Sıralama:** Listeleme uç noktalarında `Pageable` desteği
+- [ ] **Test Kapsamı:** JUnit 5 ve Mockito ile birim ve entegrasyon testleri
 
 ---
 
-## 🔒 Security Best Practices
+## 🔒 Güvenlik Uyarıları
 
 > [!WARNING]
-> This application currently stores passwords in plaintext for demonstration and architectural prototyping. For production deployment:
-> 1. Integrate Spring Security and encrypt all credentials with `BCryptPasswordEncoder`.
-> 2. Externalize database passwords using environment variables or a secret vault. Never commit plaintext database credentials to public source control.
-> 3. Enforce CORS policies and HTTPS/TLS certificates.
+> Bu uygulama eğitim, prototipleme ve mimari gösterim amacıyla geliştirildiğinden şifreleri veritabanında düz metin olarak tutmaktadır. Gerçek canlı ortamlar için:
+> 1. Spring Security eklenmeli ve parolalar `BCrypt` ile hashlenmelidir.
+> 2. Veritabanı şifreleri kaynak kodda tutulmamalı, ortam değişkenleri (Environment Variables) ile yönetilmelidir.
+> 3. CORS politikaları ve HTTPS protokolü zorunlu kılınmalıdır.
 
 ---
 
-## 🤝 Contributing
+## 🤝 Katkıda Bulunma
 
-Contributions, issues, and feature requests are welcome!
-1. Fork the Project (`https://github.com/BurhanAlperen/E_comm_amazon/fork`)
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'feat: Add AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Projeye katkı sağlamaktan memnuniyet duyarız:
+1. Depoyu Fork'layın (`https://github.com/BurhanAlperen/E_comm_amazon/fork`)
+2. Yeni Özellik Dalı Açın (`git checkout -b feature/YeniOzellik`)
+3. Değişiklikleri Commit'leyin (`git commit -m 'feat: Yeni ozellik eklendi'`)
+4. Dalı Push'layın (`git push origin feature/YeniOzellik`)
+5. Bir Pull Request (PR) Gönderin
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Geliştirici
 
 **Burhan Alperen**
 - GitHub: [@BurhanAlperen](https://github.com/BurhanAlperen)
-- Project Repository: [E_comm_amazon](https://github.com/BurhanAlperen/E_comm_amazon)
+- Depo Bağlantısı: [E_comm_amazon](https://github.com/BurhanAlperen/E_comm_amazon)
 
 ---
 
-## 📄 License
+## 📄 Lisans
 
-This project is currently unlicensed for proprietary portfolio use. All rights reserved by [Burhan Alperen](https://github.com/BurhanAlperen).
+Bu proje şu anda portföy kullanımı için tescillenmiştir. Tüm hakları [Burhan Alperen](https://github.com/BurhanAlperen)'e aittir.
