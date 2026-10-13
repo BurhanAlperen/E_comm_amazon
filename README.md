@@ -26,6 +26,10 @@
 </p>
 
 <p align="center">
+  🌐 <strong>Languages:</strong> <strong>English</strong> | <a href="README_TR.md">Türkçe</a>
+</p>
+
+<p align="center">
   <a href="#-project-overview">Overview</a> •
   <a href="#-visual-architecture">Architecture</a> •
   <a href="#-features">Features</a> •
