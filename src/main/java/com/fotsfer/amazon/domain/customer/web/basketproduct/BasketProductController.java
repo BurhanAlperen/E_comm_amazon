@@ -21,9 +21,9 @@ public class BasketProductController {
     }
 
 
-    @PutMapping("/{id}")
-
-    @DeleteMapping("/{id}")
+    // TODO: Implement update and delete endpoints
+    // @PutMapping("/{id}")
+    // @DeleteMapping("/{id}")
 
 
 
