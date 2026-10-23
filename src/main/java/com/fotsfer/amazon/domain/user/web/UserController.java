@@ -1,5 +1,6 @@
 package com.fotsfer.amazon.domain.user.web;
 
+import com.fotsfer.amazon.domain.base.BaseResponse;
 import com.fotsfer.amazon.domain.user.api.UserDto;
 import com.fotsfer.amazon.domain.user.api.UserService;
 import com.fotsfer.amazon.domain.user.impl.User;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("users")
 public class UserController {
@@ -22,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String userLogin(@RequestBody UserRequest user) {
+    public BaseResponse userLogin(@RequestBody UserRequest user) {
         return service.userLogin(user.getUsername(), user.getPassword());
     }
 

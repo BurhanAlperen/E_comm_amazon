@@ -1,5 +1,6 @@
 package com.fotsfer.amazon.domain.user.api;
 
+import com.fotsfer.amazon.domain.base.BaseResponse;
 import com.fotsfer.amazon.domain.user.impl.User;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface UserService {
     UserDto update(Integer id, UserDto user);
     void delete(int id);
     List<UserDto> findAll();
-    String userLogin(String username, String password);
+    BaseResponse userLogin(String username, String password);
 }

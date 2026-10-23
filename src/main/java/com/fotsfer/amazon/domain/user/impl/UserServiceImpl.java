@@ -1,5 +1,7 @@
 package com.fotsfer.amazon.domain.user.impl;
 
+import com.fotsfer.amazon.domain.base.BaseResponse;
+import com.fotsfer.amazon.domain.exception.BusinessException;
 import com.fotsfer.amazon.domain.user.api.UserDto;
 import com.fotsfer.amazon.domain.user.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,20 +44,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
     @Override
-    public String userLogin(String username, String password) {
-        if (username == null || password == null) {
-            throw new IllegalArgumentException("Username or password cannot be null");
+    public BaseResponse userLogin(String username, String password) {
+        if (username == null || password == null || username.trim().isEmpty() || password.trim().isEmpty()) {
+            throw new BusinessException(new BaseResponse(2001, "Kullanıcı adı veya şifre boş olamaz"));
         }
         User user = repository.findUserByUsername(username);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
+        if (user == null || !user.getPassword().equals(password)) {
+            throw new BusinessException(new BaseResponse(2005, "Kullanıcı Adı ve Şifrenizi Kontrol Ederek Yeniden Deneyiniz"));
         }
-        if (!user.getPassword().equals(password)) {
-            throw new IllegalArgumentException("Wrong password");
-        }
-        return "Sisteme Giriş Yapıldı";
+        return new BaseResponse(200, "Sisteme Giriş Yapıldı");
     }
 
     //Read
