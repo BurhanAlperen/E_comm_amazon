@@ -1,6 +1,8 @@
 package com.fotsfer.amazon.domain.product.impl.category;
 
 
+import com.fotsfer.amazon.domain.base.BaseResponse;
+import com.fotsfer.amazon.domain.exception.BusinessException;
 import com.fotsfer.amazon.domain.product.api.category.CategoryDto;
 import com.fotsfer.amazon.domain.product.api.category.CategoryService;
 import lombok.Getter;
@@ -33,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public CategoryDto update(Integer id, CategoryDto categoryDto) {
         Category existingCategory = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+                .orElseThrow(() -> new BusinessException(new BaseResponse(2008,"Category not found")));
         //
         existingCategory.setCategoryName(categoryDto.getCategoryName());
         Category updatedCategory = repository.save(existingCategory);
