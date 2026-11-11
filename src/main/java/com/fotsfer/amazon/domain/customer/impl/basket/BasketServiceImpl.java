@@ -1,9 +1,12 @@
 package com.fotsfer.amazon.domain.customer.impl.basket;
 
+import com.fotsfer.amazon.domain.base.BaseResponse;
 import com.fotsfer.amazon.domain.customer.api.basket.BasketDto;
 import com.fotsfer.amazon.domain.customer.api.basket.BasketService;
 import com.fotsfer.amazon.domain.customer.api.basketProduct.BasketProductDto;
 import com.fotsfer.amazon.domain.customer.api.basketProduct.BasketProductService;
+import com.fotsfer.amazon.domain.exception.BusinessException;
+import com.fotsfer.amazon.domain.exception.GlobalExceptionHandler;
 import com.fotsfer.amazon.domain.product.api.product.ProductService;
 import com.fotsfer.amazon.domain.product.impl.product.Product;
 import com.fotsfer.amazon.domain.user.api.UserService;
@@ -48,7 +51,7 @@ public class BasketServiceImpl implements BasketService {
 
             Product product = productService.getProductById(dto.getProducts().get(0).getProductId());
             if (product == null) {
-                throw new IllegalArgumentException("Product not found");
+                throw new BusinessException(new BaseResponse( 1001 ,"Product not found"));
             }
 
             BasketProduct basketProduct = new BasketProduct();
