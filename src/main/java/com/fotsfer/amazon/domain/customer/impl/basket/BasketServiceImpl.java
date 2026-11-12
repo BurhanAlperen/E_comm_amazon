@@ -51,7 +51,7 @@ public class BasketServiceImpl implements BasketService {
 
             Product product = productService.getProductById(dto.getProducts().get(0).getProductId());
             if (product == null) {
-                throw new BusinessException(new BaseResponse( 1001 ,"Product not found"));
+                throw new BusinessException(new BaseResponse( 3005 ,"The Product you searching is not found"));
             }
 
             BasketProduct basketProduct = new BasketProduct();
@@ -73,7 +73,7 @@ public class BasketServiceImpl implements BasketService {
 
             Product product = productService.getProductById(dto.getProducts().get(0).getProductId());
             if (product == null) {
-                throw new IllegalArgumentException("Product not found");
+                throw new BusinessException(new BaseResponse(3005,"The Product in your basket is not found"));
             }
             if (basketProduct == null) {
                 // 2- Sepette ürün yok -> Yeni ürünü sepete ekle

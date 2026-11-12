@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public CategoryDto update(Integer id, CategoryDto categoryDto) {
         Category existingCategory = repository.findById(id)
-                .orElseThrow(() -> new BusinessException(new BaseResponse(2008,"Category not found")));
+                .orElseThrow(() -> new BusinessException(new BaseResponse(3005,"Category not found")));
         //
         existingCategory.setCategoryName(categoryDto.getCategoryName());
         Category updatedCategory = repository.save(existingCategory);

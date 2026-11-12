@@ -1,5 +1,7 @@
 package com.fotsfer.amazon.domain.product.impl.store;
 
+import com.fotsfer.amazon.domain.base.BaseResponse;
+import com.fotsfer.amazon.domain.exception.BusinessException;
 import com.fotsfer.amazon.domain.product.api.store.StoreDto;
 import com.fotsfer.amazon.domain.product.api.store.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class StoreServiceImpl implements StoreService {
 
     public StoreDto update (StoreDto store,Integer storeId) {
         Store existingStore = repository.findById(storeId)
-                .orElseThrow(()-> new IllegalArgumentException("Store that id with : " + storeId + " Not found"));
+                .orElseThrow(()-> new BusinessException(new BaseResponse(3005,"Lütfen mağaza var mı kontrol ediniz")));
         existingStore.setStoreName(store.getStoreName());
         existingStore.setRate(store.getRate());
         Store updatedStore = repository.save(existingStore);

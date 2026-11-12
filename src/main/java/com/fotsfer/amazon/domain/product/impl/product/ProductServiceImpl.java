@@ -1,5 +1,7 @@
 package com.fotsfer.amazon.domain.product.impl.product;
 
+import com.fotsfer.amazon.domain.base.BaseResponse;
+import com.fotsfer.amazon.domain.exception.BusinessException;
 import com.fotsfer.amazon.domain.product.api.product.ProductDto;
 import com.fotsfer.amazon.domain.product.api.product.ProductService;
 import lombok.Getter;
@@ -31,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
     
     public ProductDto update(ProductDto productDto, Integer productId) {
         Product existingProduct = repository.findById(productId).
-                orElseThrow(()-> new IllegalArgumentException("Product not found with id: " + productId));
+                orElseThrow(()-> new BusinessException(new BaseResponse(3005,"Product not found with id: " + productId)));
         existingProduct.setName(productDto.getProductName());
         existingProduct.setAmount(productDto.getProductAmount());
         Product updatedProduct = repository.save(existingProduct);
